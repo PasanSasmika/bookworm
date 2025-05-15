@@ -17,17 +17,11 @@ const userSchema = new mongoose.Schema({
         required : true,
         minlength: 6
     },
-
-    type : {
-        type: String,
-        default : "customer"
-    },
-
     profileImage : {
         type : String,
         default : ""
     },
-});
+}, {timestamps: true});
 
 //hash the password;
 
@@ -39,6 +33,12 @@ userSchema.pre("save", async function (next){
 
     next();
 });
+
+// compare password
+
+userSchema.methods.comparePassword = async function (userPassword){
+    return await bcrypt.compare(userPassword, this.password);
+}
 
 const User = mongoose.model("User", userSchema);
 
