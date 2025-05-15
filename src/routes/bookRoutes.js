@@ -39,5 +39,31 @@ router.post("/", protectRoute, async (req, res)=>{
 });
 
 
+router.get("/",protectRoute, async (req,res)=>{
+    try {
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 5;
+        const skip = (page -1) * limit;
+
+        const books = await Book.find()
+        .sort({createdAt: -1}) //desc order
+        .skip(skip)
+        .limit(limit)
+        .populate("user", "userName profileImage");
+
+        const totalBooks = await Book.countDocuments();
+        
+        res.send({
+            books,
+            currentPage: page,
+            totalBooks,
+            totalPages: Math.ceil(totalBooks / limit)
+        });
+    } catch (error) {
+       console.log("Error in get all books route", error);
+       res.status(500).json({ message: "Internal server error"}); 
+    }
+});
+
 
 export default router;
