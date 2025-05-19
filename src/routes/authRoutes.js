@@ -55,6 +55,7 @@ router.post("/register", async(req,res)=>{
             userName: user.userName,
             email: user.email,
             profileImage: user.profileImage,
+            createdAt: user.createdAt
         },
     });
 
@@ -89,6 +90,7 @@ router.post("/login", async(req,res)=>{
               userName: user.userName,
               email:user.email,
               profileImage: user.profileImage,  
+              createdAt: user.createdAt
             },
         });
         
